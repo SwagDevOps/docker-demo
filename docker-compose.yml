@@ -16,6 +16,25 @@ services:
     volumes:
       - ./data/web:/var/www/localhost
     networks: [default, proxy]
+  api:
+    build:
+      context: images/api
+    extra_hosts:
+      - "admin.docker-demo.${DC_DOMAIN:-test}:127.0.0.1"
+    expose: ["80"]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+      VIRTUAL_HOST: "api.docker-demo.${DC_DOMAIN:-test}"
+      # ----------------------------------------------------
+      DB_NAME: docker_demo
+      DB_HOST: db
+      DB_USER: docker_demo
+      DB_PASSWORD: "docker_demo"
+      APP_ENV: dev
+    volumes:
+      - ./data/api:/var/www/localhost
+    networks: [default, proxy]
 
 networks:
   proxy:
