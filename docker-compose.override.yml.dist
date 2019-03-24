@@ -1,0 +1,17 @@
+# vim:ft=yaml:
+version: '3'
+
+services:
+  # docker network create -d bridge --subnet 172.31.0.0/16 --gateway 172.31.0.1 proxy
+  nginx-proxy:
+    image: jwilder/nginx-proxy:0.6.0
+    ports: ["80:80", "443:443"]
+    volumes:
+      # Uncomment the following line if you need ssl certs
+      # - ./volumes/certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./data/proxy/proxy.conf:/etc/nginx/conf.d/proxy.conf
+
+# Local Variables:
+# mode: yaml
+# End:

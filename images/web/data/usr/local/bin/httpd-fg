@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+exec sudo -EHu apache httpd -DFOREGROUND

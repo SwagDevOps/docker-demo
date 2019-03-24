@@ -1,0 +1,26 @@
+# vim:ft=yaml:
+---
+version: "3"
+
+services:
+  web:
+    build:
+      context: images/web
+    extra_hosts:
+      - "web.docker-demo.${DC_DOMAIN:-test}:127.0.0.1"
+    expose: ["80"]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+      VIRTUAL_HOST: "web.docker-demo.${DC_DOMAIN:-test}"
+    volumes:
+      - ./data/web:/var/www/localhost
+    networks: [default, proxy]
+
+networks:
+  proxy:
+    external: true
+
+# Local Variables:
+# mode: yaml
+# End:

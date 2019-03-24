@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+
+export COMPOSE_BIN=$(which docker-compose)
+export PWD=.
+readlink --version 2> /dev/null | grep -q 'coreutils' && {
+    PWD=$(dirname -- "$(readlink -f "$0")")
+}
+
+do_start() {
+    exec "${COMPOSE_BIN}" up -d --no-recreate --build
+}
+
+do_stop() {
+    "${COMPOSE_BIN}" stop || exit $?
+    "${COMPOSE_BIN}" rm -fv
+}
+
+do_restart() {
+    do_stop
+    do_start
+}
+
+do_exec() {
+    shift
+   "${COMPOSE_BIN}" exec "$@"
+}
+
+do_help() {
+    local words=$(cat "$0" | egrep '^do_[a-z]+\(\)' | \
+                      awk -Fdo_ '{print $2}' | awk -F\( '{print $1}' | \
+                      sed ':a;N;$!ba;s/\n/|/g')
+    printf "Usage: %s {%s}\n" "${0}" "${words}"
+}
+
+test -z "${COMPOSE_BIN}" && {
+    echo 'see: https://docs.docker.com/compose/install/'
+    exit 95 # ENOTSUP
+}
+
+test -z "$1" && {
+    do_help 1>&2
+    exit 22
+}
+
+type "do_${1}" > /dev/null || {
+    echo "Unsupported operation \`${1}'" 1>&2
+    exit 22 # EINVAL
+}
+
+cd "$PWD" && do_${1} "$@"
