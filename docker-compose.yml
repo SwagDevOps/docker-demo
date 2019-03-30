@@ -46,6 +46,17 @@ services:
     volumes:
       - ./data/db:/data/
       - db-mysql-lib:/var/lib/mysql
+  adminer:
+    build:
+      context: images/adminer
+    expose: ["80"]
+    environment:
+      VIRTUAL_HOST: "db.docker-demo.${DC_DOMAIN:-test}"
+      # ----------------------------------------------------
+      MYSQL_SERVER: db
+      MYSQL_PASSWORD: docker_demo
+      MYSQL_USER: docker_demo
+      MYSQL_DATABASE: docker_demo
 
 networks:
   proxy:

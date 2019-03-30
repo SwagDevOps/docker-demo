@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+(sleep 2 && curl localhost) &
+(sleep 4 && curl localhost) &
+
+sudo -EHu apache httpd -DFOREGROUND
