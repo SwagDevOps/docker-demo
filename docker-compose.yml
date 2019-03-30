@@ -35,10 +35,24 @@ services:
     volumes:
       - ./data/api:/var/www/localhost
     networks: [default, proxy]
+  db:
+    image: mysql:8.0.12
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: docker_demo
+      MYSQL_USER: docker_demo
+      MYSQL_DATABASE: docker_demo
+    volumes:
+      - ./data/db:/data/
+      - db-mysql-lib:/var/lib/mysql
 
 networks:
   proxy:
     external: true
+
+volumes:
+  db-mysql-lib:
 
 # Local Variables:
 # mode: yaml
