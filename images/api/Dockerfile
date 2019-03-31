@@ -4,6 +4,7 @@ FROM alpine:3.8
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN apk add --no-cache vim bash procps curl shadow libcap sudo \
+        composer \
         php7-cli \
         php7-fileinfo \
         php7-ftp \

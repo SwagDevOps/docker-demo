@@ -4,8 +4,11 @@ set -eu
 
 sed -i 's#"\(/var/www/localhost\)/htdocs"#"\1"#' /etc/apache2/httpd.conf
 setcap cap_net_bind_service=+ep /usr/sbin/httpd
+
 usermod -u ${VOLUME_UID} apache
 groupmod -g ${VOLUME_GID} apache
+chsh -s /bin/ash apache
+
 chown -Rf ${VOLUME_UID}:${VOLUME_GID} \
       /run/apache2/ \
       /usr/lib/apache2/ \
